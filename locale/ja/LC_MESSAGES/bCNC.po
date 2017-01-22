@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bCNC Japanese\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-22 12:41+0900\n"
-"PO-Revision-Date: 2017-01-22 15:36+0900\n"
+"PO-Revision-Date: 2017-01-23 01:10+0900\n"
 "Last-Translator: Yuki Shigeta <@stm32f1>\n"
 "Language-Team: hoge\n"
 "Language: ja_JP\n"
@@ -472,11 +472,11 @@ msgstr "z軸 可動域"
 
 #: ToolsPage.py:511
 msgid "Decimal digits"
-msgstr ""
+msgstr "小数点以下"
 
 #: ToolsPage.py:512
 msgid "Plotting Arc accuracy"
-msgstr ""
+msgstr "弧の描画精度"
 
 #: ToolsPage.py:513
 msgid "Start up"
@@ -492,15 +492,15 @@ msgstr "スピンドル 最高回転数 (RPM)"
 
 #: ToolsPage.py:516
 msgid "DRO Zero padding"
-msgstr "DRO"
+msgstr ""
 
 #: ToolsPage.py:517
 msgid "Header gcode"
-msgstr ""
+msgstr "最初のGコード"
 
 #: ToolsPage.py:518
 msgid "Footer gcode"
-msgstr ""
+msgstr "最後のGコード"
 
 #: ToolsPage.py:541 ToolsPage.py:568 ToolsPage.py:598 ToolsPage.py:625
 #: ToolsPage.py:656 ToolsPage.py:689 ToolsPage.py:715 ToolsPage.py:737
@@ -511,47 +511,47 @@ msgstr ""
 #: plugins/bowl.py:108 plugins/zigzag.py:94 plugins/halftone.py:41
 #: plugins/box.py:306 plugins/text.py:37
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: ToolsPage.py:542 ToolsPage.py:569 ToolsPage.py:599 EditorPage.py:233
 msgid "Comment"
-msgstr ""
+msgstr "メモ"
 
 #: ToolsPage.py:543 ToolsPage.py:629
 msgid "Feed"
-msgstr ""
+msgstr "送り速度"
 
 #: ToolsPage.py:544 ToolsPage.py:630
 msgid "Plunge Feed"
-msgstr ""
+msgstr "垂直送り速度"
 
 #: ToolsPage.py:545 ToolsPage.py:628
 msgid "Depth Increment"
-msgstr ""
+msgstr "一度に削る深さ"
 
 #: ToolsPage.py:570 lib/bFileDialog.py:294
 msgid "Type"
-msgstr ""
+msgstr "種類"
 
 #: ToolsPage.py:571
 msgid "Shape"
-msgstr ""
+msgstr "形状"
 
 #: ToolsPage.py:572 ToolsPage.py:600 ToolsPage.py:987
 msgid "Material"
-msgstr ""
+msgstr "素材"
 
 #: ToolsPage.py:573
 msgid "Coating"
-msgstr ""
+msgstr "コーティング"
 
 #: ToolsPage.py:574 plugins/bowl.py:109
 msgid "Diameter"
-msgstr ""
+msgstr "直径"
 
 #: ToolsPage.py:575
 msgid "Mount Axis"
-msgstr ""
+msgstr "固定軸"
 
 #: ToolsPage.py:576
 msgid "Flutes"
@@ -559,11 +559,11 @@ msgstr ""
 
 #: ToolsPage.py:577
 msgid "Length"
-msgstr ""
+msgstr "長さ"
 
 #: ToolsPage.py:578
 msgid "Angle"
-msgstr ""
+msgstr "角度"
 
 #: ToolsPage.py:579
 msgid "Stepover %"
@@ -579,20 +579,20 @@ msgstr ""
 
 #: ToolsPage.py:603
 msgid "Thickness"
-msgstr ""
+msgstr "厚さ"
 
 #: ToolsPage.py:627 ToolsPage.py:657 plugins/driller.py:41
 #: plugins/spirograph.py:106
 msgid "Target Depth"
-msgstr ""
+msgstr "対象の深さ"
 
 #: ToolsPage.py:631
 msgid "First cut at surface height"
-msgstr ""
+msgstr "最初に切削する深さ"
 
 #: ToolsPage.py:646
 msgid "CUT selected paths"
-msgstr ""
+msgstr "選択された経路でカット"
 
 #: ToolsPage.py:658
 msgid "Peck depth"
@@ -604,7 +604,7 @@ msgstr ""
 
 #: ToolsPage.py:660
 msgid "Distance (mm)"
-msgstr ""
+msgstr "距離 (mm)"
 
 #: ToolsPage.py:661
 msgid "Number"
@@ -612,15 +612,15 @@ msgstr ""
 
 #: ToolsPage.py:679
 msgid "DRILL selected points"
-msgstr ""
+msgstr "選択点に穴を開ける"
 
 #: ToolsPage.py:690 ToolsPage.py:716 ToolsPage.py:1001
 msgid "End Mill"
-msgstr ""
+msgstr "エンドミル"
 
 #: ToolsPage.py:691 plugins/pyrograph.py:45
 msgid "Direction"
-msgstr ""
+msgstr "方向"
 
 #: ToolsPage.py:692
 msgid "Additional offset distance"
