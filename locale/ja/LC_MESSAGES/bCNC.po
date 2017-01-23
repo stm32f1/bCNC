@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bCNC Japanese\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-22 12:41+0900\n"
-"PO-Revision-Date: 2017-01-23 11:41+0900\n"
+"PO-Revision-Date: 2017-01-23 13:02+0900\n"
 "Last-Translator: Yuki Shigeta <@stm32f1>\n"
 "Language-Team: hoge\n"
 "Language: ja_JP\n"
@@ -113,14 +113,14 @@ msgid ""
 "user to override the alarm manually. This is to ensure the user knows and "
 "acknowledges the problem and has taken steps to fix or account for it."
 msgstr ""
-"アラームは非常時に発生し, とてもまずいことが起こっています... 一般的には, 可"
-"動範囲を超えて, 何かに衝突したときに起こる, リミット エラーです. また, これら"
-"は, Grblが切断され位置情報が保証されないときや, プローブコマンドが失敗したと"
-"きにも起こりえます. 一度警報状態になると, ユーザーがリセットをするまで, Grbl"
-"は動作禁止状態となり, 実行中の動作すべてを終了します. 例えリセットしても, "
-"Grblは警報状態のままであり, 実行中のすべてのGコードをブロックしますが, 手動で"
-"警報を解除することができます. ユーザーは, これらの機能によって, 問題を発見し,"
-"認識 することができ, 問題点を修正したり, 原因を特定することができます."
+"警報は非常時に発生し, ひどく何かが間違っています. 一般的には, 可動範囲を超え"
+"て, 何かに衝突したときに起こる, リミット エラーです. また, これらは, Grblが切"
+"断され位置情報が保証されないときや, プローブコマンドが失敗したときにも起こり"
+"えます. 一度警報状態になると, ユーザーがリセットをするまで, Grblは動作禁止状"
+"態となり, 実行中の動作すべてを終了します. ただリセットしただけでは, Grblは警"
+"報状態のままであり, 実行中のすべてのGコードをブロックしますが, 手動で警報を解"
+"除することで再び稼働できます. これらの機能は, ユーザーが, 問題を認識し, 問題"
+"点を修正し, 原因を特定してください."
 
 #: Sender.py:99
 msgid "Grbl is not connected. Please specify the correct port and click Open."
@@ -266,6 +266,8 @@ msgid ""
 "A G-code command was sent, but is missing some required P or L value words "
 "in the line."
 msgstr ""
+"Gコードのコマンドがセットされましたが, ラインに必要なPまたはLの値が見つかりま"
+"せん."
 
 #: Sender.py:129
 msgid ""
@@ -280,18 +282,24 @@ msgid ""
 "The G53 G-code command requires either a G0 seek or G1 feed motion mode to "
 "be active. A different motion was active."
 msgstr ""
+"Gコードのコマンド G53 は G0 (位置決め) または G1 (直線補間) が有効である必要"
+"がありますが, 違う動作が有効になっています."
 
 #: Sender.py:131
 msgid ""
 "There are unused axis words in the block and G80 motion mode cancel is "
 "active."
 msgstr ""
+"ブロック内に, 使われていない軸が記述されています. また, G80 (固定サイクルキャ"
+"ンセル) が有効化されています."
 
 #: Sender.py:132
 msgid ""
 "A G2 or G3 arc was commanded but there are no XYZ axis words in the selected "
 "plane to trace the arc."
 msgstr ""
+"円弧補間 G2, G3 はコマンドではありますが, 選択された円弧を描く平面にXYZ軸の記"
+"述がありません."
 
 #: Sender.py:133
 msgid ""
@@ -410,12 +418,12 @@ msgstr ""
 
 #: Sender.py:437
 msgid "unknown command"
-msgstr ""
+msgstr "未知のコマンド"
 
 #: Sender.py:437
 #, python-format
 msgid "Invalid command %s"
-msgstr ""
+msgstr "無効なコマンド %s"
 
 #: Sender.py:712 ControlPage.py:403
 #, python-format
@@ -660,15 +668,15 @@ msgstr ""
 
 #: ToolsPage.py:766
 msgid "Create tabs on blocks"
-msgstr ""
+msgstr "ブロックにタブを作成"
 
 #: ToolsPage.py:776
 msgid "$0 Step pulse time [us]"
-msgstr ""
+msgstr "$0 ステップパルス時間 [us]"
 
 #: ToolsPage.py:777
 msgid "$1 Step idle delay [ms]"
-msgstr ""
+msgstr "$1 ステップホールド時間 [ms]"
 
 #: ToolsPage.py:778
 msgid "$2 Step pulse invert [mask]"
@@ -997,7 +1005,7 @@ msgstr "メールアドレス"
 
 #: Utils.py:446
 msgid "Automatic error reporting"
-msgstr "自動エラー報告送信"
+msgstr "自動でエラー報告を送信"
 
 #: Utils.py:458
 msgid "Send report"
@@ -1095,7 +1103,7 @@ msgstr "履歴から開く"
 
 #: FilePage.py:97
 msgid "Save gcode/dxf file [Ctrl-S]"
-msgstr ""
+msgstr "gcode/dxf を保存"
 
 #: FilePage.py:102 lib/bFileDialog.py:905
 msgid "Save"
@@ -1103,7 +1111,7 @@ msgstr "保存"
 
 #: FilePage.py:107
 msgid "Save gcode/dxf AS"
-msgstr ""
+msgstr "名前をつけて gcode/dxf を保存"
 
 #: FilePage.py:115
 msgid "Options"
@@ -1123,31 +1131,31 @@ msgstr "更新を確認"
 
 #: FilePage.py:157
 msgid "About"
-msgstr ""
+msgstr "情報"
 
 #: FilePage.py:164
 msgid "About the program"
-msgstr ""
+msgstr "このプログラムについて"
 
 #: FilePage.py:171 bCNC.py:2181 bCNC.py:2185 bCNC.py:2198
 msgid "Pendant"
-msgstr ""
+msgstr "リモート"
 
 #: FilePage.py:176 ControlPage.py:108
 msgid "Start"
-msgstr ""
+msgstr "起動"
 
 #: FilePage.py:183
 msgid "Start pendant"
-msgstr ""
+msgstr "pendantを起動"
 
 #: FilePage.py:187 ControlPage.py:125
 msgid "Stop"
-msgstr ""
+msgstr "停止"
 
 #: FilePage.py:194
 msgid "Stop pendant"
-msgstr ""
+msgstr "pendantを停止"
 
 #: FilePage.py:205
 msgid "Exit"
@@ -1315,31 +1323,31 @@ msgstr "選択された直線"
 
 #: EditorPage.py:188
 msgid "Delete selected lines or blocks [Del]"
-msgstr ""
+msgstr "選択されたライン, ブロックを削除 [Del]"
 
 #: EditorPage.py:200
 msgid "Toggle enable/disable block of g-code [Ctrl-L]"
-msgstr ""
+msgstr "Gコードのブロックの有効/無効 切り替え [Ctrl-L]"
 
 #: EditorPage.py:203
 msgid "Enable"
-msgstr ""
+msgstr "有効化"
 
 #: EditorPage.py:205
 msgid "Disable"
-msgstr ""
+msgstr "無効化"
 
 #: EditorPage.py:208
 msgid "Active"
-msgstr ""
+msgstr "アクティブ"
 
 #: EditorPage.py:214
 msgid "Enable or disable blocks of gcode"
-msgstr ""
+msgstr "Gコードのブロックの有効化/無効化"
 
 #: EditorPage.py:221
 msgid "Expand"
-msgstr ""
+msgstr "拡張"
 
 #: EditorPage.py:226
 msgid "Toggle expand/collapse blocks of gcode [Ctrl-E]"
@@ -1351,11 +1359,11 @@ msgstr ""
 
 #: EditorPage.py:247 EditorPage.py:254
 msgid "Move"
-msgstr ""
+msgstr "移動"
 
 #: EditorPage.py:262
 msgid "Move objects [M]"
-msgstr ""
+msgstr "オブジェクトを移動 [M]"
 
 #: EditorPage.py:269
 msgid "Origin"
@@ -1367,39 +1375,39 @@ msgstr ""
 
 #: EditorPage.py:283
 msgid "Top-Left"
-msgstr ""
+msgstr "左上"
 
 #: EditorPage.py:284
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: EditorPage.py:285
 msgid "Bottom-Left"
-msgstr ""
+msgstr "左下"
 
 #: EditorPage.py:286
 msgid "Top"
-msgstr ""
+msgstr "上"
 
 #: EditorPage.py:287 ProbePage.py:377 ProbePage.py:389
 msgid "Center"
-msgstr ""
+msgstr "中心"
 
 #: EditorPage.py:288
 msgid "Bottom"
-msgstr ""
+msgstr "下"
 
 #: EditorPage.py:289
 msgid "Top-Right"
-msgstr ""
+msgstr "右上"
 
 #: EditorPage.py:290
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: EditorPage.py:291
 msgid "Bottom-Right"
-msgstr ""
+msgstr "右下"
 
 #: EditorPage.py:302 plugins/hilbert.py:90
 msgid "Order"
@@ -1407,23 +1415,23 @@ msgstr ""
 
 #: EditorPage.py:303 bCNC.py:1442
 msgid "Optimize"
-msgstr ""
+msgstr "最適化"
 
 #: EditorPage.py:311
 msgid "Up"
-msgstr ""
+msgstr "上昇"
 
 #: EditorPage.py:316
 msgid "Move selected g-code up [Ctrl-Up, Ctrl-PgUp]"
-msgstr ""
+msgstr "選択されたGコードを上に移動 [Ctrl-Up, Ctrl-PgUp]"
 
 #: EditorPage.py:323
 msgid "Down"
-msgstr ""
+msgstr "下降"
 
 #: EditorPage.py:328
 msgid "Move selected g-code down [Ctrl-Down, Ctrl-PgDn]"
-msgstr ""
+msgstr "選択されたGコードを下に移動 [Ctrl-Down, Ctrl-PgDn]"
 
 #: EditorPage.py:340
 msgid "Invert cutting order of selected blocks"
@@ -1435,7 +1443,7 @@ msgstr ""
 
 #: EditorPage.py:355
 msgid "CW"
-msgstr ""
+msgstr "CW"
 
 #: EditorPage.py:361
 msgid "Rotate selected gcode clock-wise (-90deg)"
@@ -1443,7 +1451,7 @@ msgstr ""
 
 #: EditorPage.py:368
 msgid "Flip"
-msgstr ""
+msgstr "裏返す"
 
 #: EditorPage.py:374
 msgid "Rotate selected gcode by 180deg"
@@ -1451,7 +1459,7 @@ msgstr ""
 
 #: EditorPage.py:381
 msgid "CCW"
-msgstr ""
+msgstr "CCW"
 
 #: EditorPage.py:387
 msgid "Rotate selected gcode counter-clock-wise (90deg)"
@@ -1459,19 +1467,19 @@ msgstr ""
 
 #: EditorPage.py:394
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
 
 #: EditorPage.py:400
 msgid "Mirror horizontally X=-X selected gcode"
-msgstr ""
+msgstr "水平方向にミラー(y軸対照)"
 
 #: EditorPage.py:407
 msgid "Vertical"
-msgstr ""
+msgstr "垂直"
 
 #: EditorPage.py:413
 msgid "Mirror vertically Y=-Y selected gcode"
-msgstr ""
+msgstr "垂直方向にミラー(x軸対照)"
 
 #: EditorPage.py:424
 msgid "Route"
@@ -1519,7 +1527,7 @@ msgstr ""
 
 #: EditorPage.py:521
 msgid "GCode editor"
-msgstr ""
+msgstr "Gコード"
 
 #: EditorPage.py:522
 msgid "Editor"
