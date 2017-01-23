@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bCNC Japanese\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-22 12:41+0900\n"
-"PO-Revision-Date: 2017-01-23 01:10+0900\n"
+"PO-Revision-Date: 2017-01-23 11:41+0900\n"
 "Last-Translator: Yuki Shigeta <@stm32f1>\n"
 "Language-Team: hoge\n"
 "Language: ja_JP\n"
@@ -588,7 +588,7 @@ msgstr "対象の深さ"
 
 #: ToolsPage.py:631
 msgid "First cut at surface height"
-msgstr "最初に切削する深さ"
+msgstr "最初の切削面の高さ"
 
 #: ToolsPage.py:646
 msgid "CUT selected paths"
@@ -608,7 +608,7 @@ msgstr "距離 (mm)"
 
 #: ToolsPage.py:661
 msgid "Number"
-msgstr ""
+msgstr "番号"
 
 #: ToolsPage.py:679
 msgid "DRILL selected points"
@@ -624,31 +624,31 @@ msgstr "方向"
 
 #: ToolsPage.py:692
 msgid "Additional offset distance"
-msgstr ""
+msgstr "追加のオフセット"
 
 #: ToolsPage.py:693 plugins/box.py:315
 msgid "Overcut"
-msgstr ""
+msgstr "余分にカット"
 
 #: ToolsPage.py:705
 msgid "Generate profile path"
-msgstr ""
+msgstr "プロファイル加工の経路を生成"
 
 #: ToolsPage.py:727
 msgid "Generate pocket path"
-msgstr ""
+msgstr "ポケット加工の経路を生成"
 
 #: ToolsPage.py:738
 msgid "Number of tabs"
-msgstr ""
+msgstr "タブの名称"
 
 #: ToolsPage.py:739
 msgid "Min. Distance of tabs"
-msgstr ""
+msgstr "タブ間の最小距離"
 
 #: ToolsPage.py:742
 msgid "Height"
-msgstr ""
+msgstr "高さ"
 
 #: ToolsPage.py:762
 msgid "Tabs error"
@@ -868,7 +868,7 @@ msgstr "プロファイル"
 
 #: ToolsPage.py:1096
 msgid "Perform a profile operation on selected code"
-msgstr "選択された部分にポケット加工"
+msgstr "選択された部分にプロファイル加工"
 
 #: ToolsPage.py:1103
 msgid "Pocket"
