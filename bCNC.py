@@ -5,8 +5,8 @@
 # Author: vvlachoudis@gmail.com
 # Date: 24-Aug-2014
 
-__version__ = "0.9.8"
-__date__    = "15 Jan 2017"
+__version__ = "0.9.9"
+__date__    = "24 Mar 2017"
 __author__  = "Vasilis Vlachoudis"
 __email__   = "vvlachoudis@gmail.com"
 
@@ -63,17 +63,17 @@ import CNCList
 import CNCCanvas
 import webbrowser
 
-from CNCRibbon	  import Page
-from ToolsPage	  import Tools, ToolsPage
-from FilePage	  import FilePage
+from CNCRibbon    import Page
+from ToolsPage    import Tools, ToolsPage
+from FilePage     import FilePage
 from ControlPage  import ControlPage
 from TerminalPage import TerminalPage
-from ProbePage	  import ProbePage
+from ProbePage    import ProbePage
 from EditorPage   import EditorPage
 
 _openserial = True	# override ini parameters
 _device     = None
-_baud	    = None
+_baud       = None
 
 MONITOR_AFTER =  200	# ms
 DRAW_AFTER    =  300	# ms
@@ -312,7 +312,7 @@ class Application(Toplevel,Sender):
 		self.bind('<<EnableToggle>>',	self.editor.toggleEnable)
 		self.bind('<<Enable>>',		self.editor.enable)
 		self.bind('<<Disable>>',	self.editor.disable)
-		self.bind('<<ChangeColor>>',self.editor.changeColor)
+		self.bind('<<ChangeColor>>',    self.editor.changeColor)
 
 		# Canvas X-bindings
 		self.bind("<<ViewChange>>",	self.viewChange)
@@ -886,6 +886,7 @@ class Application(Toplevel,Sender):
 
 	#-----------------------------------------------------------------------
 	def alarmClear(self, event=None):
+		print "alarm clear"
 		self._alarm = False
 
 	#-----------------------------------------------------------------------
@@ -1232,6 +1233,9 @@ class Application(Toplevel,Sender):
 		if rexx.abbrev("ABOUT",cmd,3):
 			self.about()
 
+		elif rexx.abbrev("AUTOLEVEL",cmd,4):
+			self.executeOnSelection("AUTOLEVEL", True)
+
 		# CAM*ERA: camera actions
 		elif rexx.abbrev("CAMERA",cmd,3):
 			# FIXME will make crazy the button state
@@ -1539,7 +1543,7 @@ class Application(Toplevel,Sender):
 		# STEP [s]: set motion step size to s
 		elif cmd == "STEP":
 			try:
-				self.setStep(float(line[1]))
+				self.control.setStep(float(line[1]))
 			except:
 				pass
 
@@ -1666,7 +1670,9 @@ class Application(Toplevel,Sender):
 		self.busy()
 		sel = None
 		undoinfo = None	# all operations should return undo information
-		if   cmd == "CUT":
+		if   cmd == "AUTOLEVEL":
+			sel = self.gcode.autolevel(items)
+		elif cmd == "CUT":
 			sel = self.gcode.cut(items, *args)
 		elif cmd == "CLOSE":
 			sel = self.gcode.close(items)
@@ -2079,7 +2085,6 @@ class Application(Toplevel,Sender):
 	# @return true if the compile has to abort
 	#-----------------------------------------------------------------------
 	def checkStop(self):
-		if self._stop: print "CHECK STOP"
 		try:
 			self.update()	# very tricky function of Tk
 		except TclError:
@@ -2173,7 +2178,7 @@ class Application(Toplevel,Sender):
 						self.queue.put(line)
 					n += 1
 			self._runLines = n	# set it at the end to be sure that all lines are queued
-		self.queue.put((WAIT,))		# wait at the end fo become idle
+		self.queue.put((WAIT,))		# wait at the end to become idle
 
 		self.setStatus(_("Running..."))
 		self.statusbar.setLimits(0, self._runLines)

@@ -32,8 +32,9 @@ import Pendant
 
 WIKI = "https://github.com/vlachoudis/bCNC/wiki"
 
-SERIAL_POLL   = 0.125	# s
-G_POLL	      = 10	# s
+SERIAL_POLL    = 0.125	# s
+SERIAL_TIMEOUT = 0.10	# s
+G_POLL	       = 10	# s
 RX_BUFFER_SIZE = 128
 
 OV_FEED_100     = chr(0x90)        # Extended override commands
@@ -117,6 +118,7 @@ ERROR_CODES = {
 	"error:14" : _("(Grbl-Mega Only) Build info or startup line exceeded EEPROM line length limit."),
 	"error:15" : _("Jog target exceeds machine travel. Command ignored."),
 	"error:16" : _("Jog command with no '=' or contains prohibited g-code."),
+	"error:17" : _("Laser mode requires PWM output."),
 	"error:20" : _("Unsupported or invalid g-code command found in block."),
 	"error:21" : _("More than one g-code command from same modal group found in block."),
 	"error:22" : _("Feed rate has not yet been set or is undefined."),
@@ -135,7 +137,6 @@ ERROR_CODES = {
 	"error:35" : _("A G2 or G3 arc, traced with the offset definition, is missing the IJK offset word in the selected plane to trace the arc."),
 	"error:36" : _("There are unused, leftover G-code words that aren't used by any command in the block."),
 	"error:37" : _("The G43.1 dynamic tool length offset command cannot apply an offset to an axis other than its configured axis. The Grbl default axis is the Z-axis."),
-	"error:38" : _("An invalid tool number sent to the parser"),
 
 	"ALARM:1" : _("Hard limit triggered. Machine position is likely lost due to sudden and immediate halt. Re-homing is highly recommended."),
 	"ALARM:2" : _("G-code motion target exceeds machine travel. Machine position safely retained. Alarm may be unlocked."),
@@ -154,6 +155,7 @@ ERROR_CODES = {
 	"Door:2" : _("Door opened. Hold (or parking retract) in-progress. Reset will throw an alarm."),
 	"Door:3" : _("Door closed and resuming. Restoring from park, if applicable. Reset will throw an alarm."),
 }
+
 
 # Convert Grbl V1.0 codes to Grbl V0.9
 for e1,e0 in (	("error: Expected command letter", "error:1"),
@@ -533,12 +535,14 @@ class Sender:
 	# Open serial port
 	#----------------------------------------------------------------------
 	def open(self, device, baudrate):
-		self.serial = serial.Serial(	device,
+		#self.serial = serial.Serial(
+		self.serial = serial.serial_for_url(
+						device,
 						baudrate,
 						bytesize=serial.EIGHTBITS,
 						parity=serial.PARITY_NONE,
 						stopbits=serial.STOPBITS_ONE,
-						timeout=0.1,
+						timeout=SERIAL_TIMEOUT,
 						xonxoff=False,
 						rtscts=False)
 		# Toggle DTR to reset Arduino
@@ -616,19 +620,19 @@ class Sender:
 		self.notBusy()
 
 	#----------------------------------------------------------------------
-	def softReset(self):
+	def softReset(self, clearAlarm=True):
 		if self.serial:
 		#	if self.controller in (Utils.GRBL, Utils.GRBL1):
 				self.serial.write(b"\030")
 		#	elif self.controller == Utils.SMOOTHIE:
 		#		self.serial.write(b"reset\n")
 		self.stopProbe()
-		self._alarm = False
+		if clearAlarm: self._alarm = False
 		CNC.vars["_OvChanged"] = True	# force a feed change if any
 
 	#----------------------------------------------------------------------
-	def unlock(self):
-		self._alarm = False
+	def unlock(self, clearAlarm=True):
+		if clearAlarm: self._alarm = False
 		self.sendGCode("$X")
 
 	#----------------------------------------------------------------------
@@ -807,10 +811,10 @@ class Sender:
 		# remember and send all G commands
 		G = " ".join([x for x in CNC.vars["G"] if x[0]=="G"])	# remember $G
 		TLO = CNC.vars["TLO"]
-		self.softReset()			# reset controller
+		self.softReset(False)			# reset controller
 		if self.controller in (Utils.GRBL0, Utils.GRBL1):
 			time.sleep(1)
-			self.unlock()
+			self.unlock(False)
 		self.runEnded()
 		self.stopProbe()
 		if G: self.sendGCode(G)			# restore $G
@@ -954,20 +958,21 @@ class Sender:
 					if isinstance(tosend, unicode):
 						tosend = tosend.encode("ascii","replace")
 
-					#Keep track of last feed
+					# Keep track of last feed
 					pat = FEEDPAT.match(tosend)
 					if pat is not None:
 						self._lastFeed = pat.group(2)
 
-					if self.controller == Utils.GRBL0:
+					if self.controller in (Utils.GRBL0, Utils.SMOOTHIE):
 						if CNC.vars["_OvChanged"]:
 							CNC.vars["_OvChanged"] = False
 							self._newFeed = float(self._lastFeed)*CNC.vars["_OvFeed"]/100.0
-							if pat is None and self._newFeed!=0:
-								tosend = "f%g" % (self._newFeed) + tosend
+							if pat is None and self._newFeed!=0 \
+							   and not tosend.startswith("$"):
+								tosend = "f%g%s" % (self._newFeed, tosend)
 
-						#Apply override Feed
-						if CNC.vars["_OvFeed"] != 100 and self._newFeed!=0:
+						# Apply override Feed
+						if CNC.vars["_OvFeed"] != 100 and self._newFeed != 0:
 							pat = FEEDPAT.match(tosend)
 							if pat is not None:
 								try:
@@ -997,7 +1002,6 @@ class Sender:
 					elif self.controller == Utils.GRBL1:
 						status = False
 						fields = line[1:-1].split("|")
-						#print fields
 						if not self._alarm:
 							CNC.vars["state"] = fields[0]
 						for field in fields[1:]:
@@ -1021,14 +1025,14 @@ class Sender:
 							elif word[0] == "Ov":
 								CNC.vars["OvFeed"]    = int(word[1])
 								CNC.vars["OvRapid"]   = int(word[2])
-								CNC.vars["OvSpindle"] = int(word[2])
+								CNC.vars["OvSpindle"] = int(word[3])
 							elif word[0] == "WCO":
 								CNC.vars["wcox"] = float(word[1])
 								CNC.vars["wcoy"] = float(word[2])
 								CNC.vars["wcoz"] = float(word[3])
 
 						# Machine is Idle buffer is empty stop waiting and go on
-						if wait and not cline and fields[0]=="Idle":
+						if wait and not cline and fields[0] in ("Idle","Check"):
 							wait = False
 							self._gcount += 1
 
@@ -1055,7 +1059,7 @@ class Sender:
 							# stop waiting and go on
 							#print "<<< WAIT=",wait,sline,pat.group(1),sum(cline)
 							#print ">>>", line
-							if wait and not cline and pat.group(1)=="Idle":
+							if wait and not cline and pat.group(1) in ("Idle","Check"):
 								#print ">>>",line
 								wait = False
 								#print "<<< NO MORE WAIT"
@@ -1076,7 +1080,7 @@ class Sender:
 							self.gcode.probe.add(
 								 CNC.vars["prbx"]-CNC.vars["wcox"],
 								 CNC.vars["prby"]-CNC.vars["wcoy"],
-								 CNC.vars["prbz"]-CNC.vars["wcoy"])
+								 CNC.vars["prbz"]-CNC.vars["wcoz"])
 							self._probeUpdate = True
 							CNC.vars[word[0]] = word[1:]
 						elif word[0] == "GC":
@@ -1139,12 +1143,11 @@ class Sender:
 					self._gcount += 1
 					if cline: del cline[0]
 					if sline: del sline[0]
-					#print "gcount OK=",self._gcount
 					#print "SLINE:",sline
-					if  self._alarm and not self.running:
-						# turn off alarm for connected status once
-						# a valid gcode event occurs
-						self._alarm = False
+#					if  self._alarm and not self.running:
+#						# turn off alarm for connected status once
+#						# a valid gcode event occurs
+#						self._alarm = False
 
 				elif line[0] == "$":
 					self.log.put((Sender.MSG_RECEIVE, line))

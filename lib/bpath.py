@@ -1,33 +1,12 @@
 #!/usr/bin/python
 # -*- coding: ascii -*-
-# $Id: bpath.py 3598 2015-10-16 13:07:06Z bnv $
 #
 # Copyright and User License
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Copyright Vasilis.Vlachoudis@cern.ch for the
 # European Organization for Nuclear Research (CERN)
 #
-# All rights not expressly granted under this license are reserved.
-#
-# Installation, use, reproduction, display of the
-# software ("flair"), in source and binary forms, are
-# permitted free of charge on a non-exclusive basis for
-# internal scientific, non-commercial and non-weapon-related
-# use by non-profit organizations only.
-#
-# For commercial use of the software, please contact the main
-# author Vasilis.Vlachoudis@cern.ch for further information.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following
-# conditions are met:
-#
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the
-#    distribution.
+# Please consult the flair documentation for the license
 #
 # DISCLAIMER
 # ~~~~~~~~~~
@@ -201,9 +180,11 @@ class Segment:
 		if abs(self.startPhi)<EPS: self.startPhi = 0.0
 		if abs(self.endPhi)  <EPS: self.endPhi   = 0.0
 
-		if self.type == Segment.CW:	# Inverted: end < start
+		if self.type == Segment.CW:
+			# CW/Inverted: it must be end < start
 			if self.startPhi <= self.endPhi: self.startPhi += PI2
-		elif self.type == Segment.CCW:	# Normal: start < end
+		elif self.type == Segment.CCW:
+			# CCW/Normal: it must be start < end
 			if self.endPhi <= self.startPhi: self.endPhi += PI2
 
 		self.calcBBox()
@@ -284,6 +265,42 @@ class Segment:
 
 		if phi < 0.0: phi += PI2
 		return self.radius * phi
+
+	#----------------------------------------------------------------------
+	# Tangent vector at start
+	#----------------------------------------------------------------------
+	def tangentStart(self):
+		if self.type == Segment.LINE:
+			t = self.AB.clone()
+			t.norm()
+			return t
+		else:
+			O = self.start - self.center
+			O.norm()
+			if self.type == Segment.CCW:
+				# return cross product -O x z(0,0,1)
+				return Vector(-O[1], O[0])
+			else:
+				# return cross product -O x z(0,0,1)
+				return Vector(O[1], -O[0])
+
+	#----------------------------------------------------------------------
+	# Tangent vector at end
+	#----------------------------------------------------------------------
+	def tangentEnd(self):
+		if self.type == Segment.LINE:
+			t = self.AB.clone()
+			t.norm()
+			return t
+		else:
+			O = self.end - self.center
+			O.norm()
+			if self.type == Segment.CCW:
+				# return cross product -O x z(0,0,1)
+				return Vector(-O[1], O[0])
+			else:
+				# return cross product -O x z(0,0,1)
+				return Vector(O[1], -O[0])
 
 	#----------------------------------------------------------------------
 	# Orthogonal vector at start
@@ -602,43 +619,46 @@ class Path(list):
 	#----------------------------------------------------------------------
 	def _direction(self, closed=True):
 		phi = 0.0
+
 		if closed:
-			start = 0
+			A = self[-1].tangentEnd()
 		else:
-			start = 1
-		P  = self[start-1].AB
-		PL = P.length()
-		for i,N in enumerate(self[start:]):
-			NL = N.AB.length()
-			prod = PL * NL
-			if abs(prod)>EPS:
-				cross = (P ^ N.AB) / prod
-				if abs(cross)<EPS:
-					if N.type == Segment.CW:
-						phi -= PI2
-					elif N.type == Segment.CCW:
-						phi += PI2
-				elif   cross <= -0.9999999999:
-					phi -= pi/2.0
-				elif cross >=  0.9999999999:
-					phi += pi/2.0
-				else:
-					# WARNING Don't use the angle from the asin(cross)
-					# since it can fail when ang > 90deg then it will return
-					# the ang-90deg
-					#phi += asin(cross)
-					dot = (N.AB * P) / prod
-					if   dot<-1.0: dot=-1.0
-					elif dot> 1.0: dot= 1.0
-					phi += copysign(acos(dot), cross)
-			elif N.type == Segment.CW:
-				phi -= PI2
-			elif N.type == Segment.CCW:
-				phi += PI2
-			P  = N.AB
-			PL = NL
-		if phi < 0.0: return 1
-		return -1
+			A = None
+
+#		print
+		for i,segment in enumerate(self):
+#			print i,segment
+			if segment.type == Segment.LINE:
+				B = segment.AB
+#				print "\tA=",A
+#				print "\tB=",B
+				if A is not None:
+					phi += atan2(A^B,A*B)
+#					print "\tdphi=",atan2(A^B,A*B),degrees(atan2(A^B,A*B))
+#					print "\tA^B=",A^B,"A*B=",A*B
+				A = B
+			else:
+				B = segment.tangentStart()
+#				print "\tA=",A
+#				print "\tB=",B
+				if A is not None:
+					phi += atan2(A^B,A*B)
+#					print "\tA^B=",A^B,"A*B=",A*B
+#					print "\tdphi=",atan2(A^B,A*B),degrees(atan2(A^B,A*B))
+#					print "\tphi(Start)=",phi,degrees(phi)
+				phi += segment.endPhi - segment.startPhi
+#				print "\tarc=",segment.endPhi - segment.startPhi, degrees(segment.endPhi - segment.startPhi)
+				A = segment.tangentEnd()
+#				print "\ttangenEnd=",A
+#			print "\tphi=",phi,degrees(phi)
+
+#		print "phi=",phi
+		if phi < 0.0:
+#			print "Direction: CW"
+			return 1
+		else:
+#			print "Direction: CCW"
+			return -1
 
 	#----------------------------------------------------------------------
 	# @return the bounding box of the path (very crude)
@@ -664,18 +684,18 @@ class Path(list):
 	# WARNING: the path must be closed otherwise it is meaningless
 	#----------------------------------------------------------------------
 	def isInside(self, P):
-		print "P=",P
+		#print "P=",P
 		minx,miny,maxx,maxy = self.bbox()
-		print "limits:",minx,miny,maxx,maxy
+		#print "limits:",minx,miny,maxx,maxy
 		line = Segment(Segment.LINE, P, Vector(maxx*1.1, P[1]))
 		count = 0
 		PP1 = None	# previous points to avoid double counting
 		PP2 = None
-		print "Line=",line
+		#print "Line=",line
 		for i,segment in enumerate(self):
 			P1,P2 = line.intersect(segment)
-			print
-			print i,segment
+			#print
+			#print i,segment
 			if P1 is not None:
 				if PP1 is None and PP2 is None:
 					count += 1
@@ -699,10 +719,10 @@ class Path(list):
 						count += 1
 					elif PP2 is not None and not eq(P2,PP2):
 						count += 1
-			print P1,P2,count
+			#print P1,P2,count
 			PP1 = P1
 			PP2 = P2
-		print "Count=",count
+		#print "Count=",count
 		return bool(count&1)
 
 	#----------------------------------------------------------------------
@@ -1098,7 +1118,7 @@ class Path(list):
 	#----------------------------------------------------------------------
 	# Convert a dxf layer to a list of segments
 	#----------------------------------------------------------------------
-	def fromDxfLayer(self, dxf, layer, units=0):
+	def fromDxf(self, dxf, layer, units=0):
 		for entity in layer:
 			self.color = entity.color()
 			start = dxf.convert(entity.start(), units)
@@ -1123,8 +1143,8 @@ class Path(list):
 				bulge = entity.bulge()
 				if not isinstance(bulge,list): bulge = [bulge]*len(xy)
 				if entity._invert:
-					xy.reverse()
 					# reverse and negate bulge
+					xy.reverse()
 					bulge = [-x for x in bulge[::-1]]
 
 				for i,(x,y) in enumerate(xy[1:]):
@@ -1133,10 +1153,22 @@ class Path(list):
 					if eq(start,end): continue
 					if abs(b)<EPS:
 						self.append(Segment(Segment.LINE, start, end))
+
+					elif abs(b-1.0)<EPS:
+						# Semicircle
+						center = (start+end)/2.0
+						if b<0.0:
+							t  = Segment.CW
+						else:
+							t  = Segment.CCW
+						self.append(Segment(t, start, end, center))
+
 					else:
 						# arc with bulge = b
 						# b = tan(theta/4)
 						theta = 4.0*atan(abs(b))
+						if abs(b)>1.0:
+							theta = 2.0*pi - theta
 						AB = start-end
 						ABlen = AB.length()
 						d = ABlen / 2.0
@@ -1148,6 +1180,8 @@ class Path(list):
 								t  = Segment.CW
 							else:
 								t  = Segment.CCW
+								OC = -OC
+							if abs(b)>1.0:
 								OC = -OC
 							center = Vector(C[0] - OC*AB[1]/ABlen,
 									C[1] + OC*AB[0]/ABlen)

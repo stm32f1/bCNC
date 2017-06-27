@@ -201,6 +201,19 @@ class ProbeCommonFrame(CNCRibbon.PageFrame):
 		row = 0
 		col = 0
 
+		# ----
+		# Fast Probe Feed
+		Label(frame, text=_("Fast Probe Feed:")).grid(row=row, column=col, sticky=E)
+		col += 1
+		ProbeCommonFrame.fastProbeFeed = tkExtra.FloatEntry(frame, background="White", width=5)
+		ProbeCommonFrame.fastProbeFeed.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(ProbeCommonFrame.fastProbeFeed, _("Set initial probe feed rate for tool change and calibration"))
+		self.addWidget(ProbeCommonFrame.fastProbeFeed)
+
+		# ----
+		# Probe Feed
+		row += 1
+		col  = 0
 		Label(frame, text=_("Probe Feed:")).grid(row=row, column=col, sticky=E)
 		col += 1
 		ProbeCommonFrame.probeFeed = tkExtra.FloatEntry(frame, background="White", width=5)
@@ -257,6 +270,7 @@ class ProbeCommonFrame(CNCRibbon.PageFrame):
 	@staticmethod
 	def probeUpdate():
 		try:
+			CNC.vars["fastprbfeed"] = float(ProbeCommonFrame.fastProbeFeed.get())
 			CNC.vars["prbfeed"] = float(ProbeCommonFrame.probeFeed.get())
 			CNC.vars["prbcmd"]  = str(ProbeCommonFrame.probeCmd.get().split()[0])
 			return False
@@ -276,12 +290,14 @@ class ProbeCommonFrame(CNCRibbon.PageFrame):
 
 	#-----------------------------------------------------------------------
 	def saveConfig(self):
+		Utils.setFloat("Probe", "fastfeed", ProbeCommonFrame.fastProbeFeed.get())
 		Utils.setFloat("Probe", "feed", ProbeCommonFrame.probeFeed.get())
 		Utils.setFloat("Probe", "tlo",  ProbeCommonFrame.tlo.get())
 		Utils.setFloat("Probe", "cmd",  ProbeCommonFrame.probeCmd.get().split()[0])
 
 	#-----------------------------------------------------------------------
 	def loadConfig(self):
+		ProbeCommonFrame.fastProbeFeed.set(Utils.getFloat("Probe","fastfeed"))
 		ProbeCommonFrame.probeFeed.set(Utils.getFloat("Probe","feed"))
 		ProbeCommonFrame.tlo.set(      Utils.getFloat("Probe","tlo"))
 		cmd = Utils.getStr("Probe","cmd")
@@ -546,19 +562,19 @@ class ProbeFrame(CNCRibbon.PageFrame):
 
 	#-----------------------------------------------------------------------
 	def loadConfig(self):
-		self.probeXdir.set(Utils.getStr("Probe","x"))
-		self.probeYdir.set(Utils.getStr("Probe","y"))
-		self.probeZdir.set(Utils.getStr("Probe","z"))
-		self.diameter.set(Utils.getStr("Probe", "center"))
-		self.warn = Utils.getBool("Warning","probe",self.warn)
+		self.probeXdir.set(Utils.getStr("Probe", "x"))
+		self.probeYdir.set(Utils.getStr("Probe", "y"))
+		self.probeZdir.set(Utils.getStr("Probe", "z"))
+		self.diameter.set(Utils.getStr("Probe",  "center"))
+		self.warn = Utils.getBool("Warning", "probe", self.warn)
 
 	#-----------------------------------------------------------------------
 	def saveConfig(self):
-		Utils.setFloat("Probe", "x",    self.probeXdir.get())
-		Utils.setFloat("Probe", "y",    self.probeYdir.get())
-		Utils.setFloat("Probe", "z",    self.probeZdir.get())
-		Utils.setFloat("Probe", "center",  self.diameter.get())
-		Utils.setBool("Warning", "probe", self.warn)
+		Utils.setFloat("Probe", "x",      self.probeXdir.get())
+		Utils.setFloat("Probe", "y",      self.probeYdir.get())
+		Utils.setFloat("Probe", "z",      self.probeZdir.get())
+		Utils.setFloat("Probe", "center", self.diameter.get())
+		Utils.setBool("Warning","probe",  self.warn)
 
 	#-----------------------------------------------------------------------
 	def updateProbe(self):
@@ -958,6 +974,13 @@ class AutolevelFrame(CNCRibbon.PageFrame):
 						parent=self.winfo_toplevel())
 			error = True
 
+		if probe.xmin >= probe.xmax:
+			if verbose:
+				tkMessageBox.showerror(_("Probe Error"),
+						_("Invalid X range [xmin>=xmax]"),
+						parent=self.winfo_toplevel())
+			error = True
+
 		try:
 			probe.ymin = float(self.probeYmin.get())
 			probe.ymax = float(self.probeYmax.get())
@@ -971,6 +994,13 @@ class AutolevelFrame(CNCRibbon.PageFrame):
 						parent=self.winfo_toplevel())
 			error = True
 
+		if probe.ymin >= probe.ymax:
+			if verbose:
+				tkMessageBox.showerror(_("Probe Error"),
+						_("Invalid Y range [ymin>=ymax]"),
+						parent=self.winfo_toplevel())
+			error = True
+
 		try:
 			probe.zmin  = float(self.probeZmin.get())
 			probe.zmax  = float(self.probeZmax.get())
@@ -979,6 +1009,13 @@ class AutolevelFrame(CNCRibbon.PageFrame):
 				tkMessageBox.showerror(_("Probe Error"),
 					_("Invalid Z probing region"),
 					parent=self.winfo_toplevel())
+			error = True
+
+		if probe.zmin >= probe.zmax:
+			if verbose:
+				tkMessageBox.showerror(_("Probe Error"),
+						_("Invalid Z range [zmin>=zmax]"),
+						parent=self.winfo_toplevel())
 			error = True
 
 		if ProbeCommonFrame.probeUpdate():
@@ -1089,7 +1126,10 @@ class CameraGroup(CNCRibbon.ButtonGroup):
 			self.switchButton.config(image=Utils.icons["camera32"])
 			self.sendGCode("G92.1")
 			self.app.canvas.cameraSwitch = False
-		self.sendGCode("G0X%gY%gZ%g"%(wx,wy,z))
+		if z is None:
+			self.sendGCode("G0X%gY%g"%(wx,wy))
+		else:
+			self.sendGCode("G0X%gY%gZ%g"%(wx,wy,z))
 
 	#-----------------------------------------------------------------------
 	def switchCamera(self, event=None):
@@ -1127,6 +1167,32 @@ class CameraFrame(CNCRibbon.PageFrame):
 		tkExtra.Balloon.set(self.location, _("Camera location inside canvas"))
 
 		# ----
+		row += 1
+		Label(lframe, text=_("Rotation:")).grid(row=row, column=0, sticky=E)
+		self.rotation = tkExtra.FloatEntry(lframe, background="White")
+		self.rotation.grid(row=row, column=1, sticky=EW)
+		self.rotation.bind("<Return>",   self.updateValues)
+		self.rotation.bind("<KP_Enter>", self.updateValues)
+		self.rotation.bind("<FocusOut>", self.updateValues)
+		tkExtra.Balloon.set(self.rotation, _("Camera rotation [degrees]"))
+		# ----
+		row += 1
+		Label(lframe, text=_("Haircross Offset:")).grid(row=row, column=0, sticky=E)
+		self.xcenter = tkExtra.FloatEntry(lframe, background="White")
+		self.xcenter.grid(row=row, column=1, sticky=EW)
+		self.xcenter.bind("<Return>",   self.updateValues)
+		self.xcenter.bind("<KP_Enter>", self.updateValues)
+		self.xcenter.bind("<FocusOut>", self.updateValues)
+		tkExtra.Balloon.set(self.xcenter, _("Haircross X offset [unit]"))
+
+		self.ycenter = tkExtra.FloatEntry(lframe, background="White")
+		self.ycenter.grid(row=row, column=2, sticky=EW)
+		self.ycenter.bind("<Return>",   self.updateValues)
+		self.ycenter.bind("<KP_Enter>", self.updateValues)
+		self.ycenter.bind("<FocusOut>", self.updateValues)
+		tkExtra.Balloon.set(self.ycenter, _("Haircross Y offset [unit]"))
+		# ----
+
 		row += 1
 		Label(lframe, text=_("Scale:")).grid(row=row, column=0, sticky=E)
 		self.scale = tkExtra.FloatEntry(lframe, background="White")
@@ -1206,15 +1272,21 @@ class CameraFrame(CNCRibbon.PageFrame):
 		Utils.setFloat("Camera", "aligncam_dx",    self.dx.get())
 		Utils.setFloat("Camera", "aligncam_dy",    self.dy.get())
 		Utils.setFloat("Camera", "aligncam_z",     self.z.get())
+		Utils.setFloat("Camera", "aligncam_rotation",     self.rotation.get())
+		Utils.setFloat("Camera", "aligncam_xcenter",     self.xcenter.get())
+		Utils.setFloat("Camera", "aligncam_ycenter",     self.ycenter.get())
 
 	#-----------------------------------------------------------------------
 	def loadConfig(self):
-		self.location.set(Utils.getStr("Camera", "aligncam_anchor"))
+		self.location.set(Utils.getStr("Camera",  "aligncam_anchor"))
 		self.diameter.set(Utils.getFloat("Camera","aligncam_d"))
-		self.scale.set( Utils.getFloat("Camera", "aligncam_scale"))
-		self.dx.set(    Utils.getFloat("Camera", "aligncam_dx"))
-		self.dy.set(    Utils.getFloat("Camera", "aligncam_dy"))
-		self.z.set(     Utils.getFloat("Camera", "aligncam_z"))
+		self.scale.set( Utils.getFloat("Camera",  "aligncam_scale"))
+		self.dx.set(    Utils.getFloat("Camera",  "aligncam_dx"))
+		self.dy.set(    Utils.getFloat("Camera",  "aligncam_dy"))
+		self.z.set(     Utils.getFloat("Camera",  "aligncam_z", ""))
+		self.rotation.set(Utils.getFloat("Camera","aligncam_rotation"))
+		self.xcenter.set(Utils.getFloat("Camera", "aligncam_xcenter"))
+		self.ycenter.set(Utils.getFloat("Camera", "aligncam_ycenter"))
 		self.updateValues()
 
 	#-----------------------------------------------------------------------
@@ -1233,6 +1305,12 @@ class CameraFrame(CNCRibbon.PageFrame):
 	#-----------------------------------------------------------------------
 	def updateValues(self, *args):
 		self.app.canvas.cameraAnchor = self.cameraAnchor()
+		try: self.app.canvas.cameraRotation = float(self.rotation.get())
+		except ValueError: pass
+		try: self.app.canvas.cameraXCenter = float(self.xcenter.get())
+		except ValueError: pass
+		try: self.app.canvas.cameraYCenter = float(self.ycenter.get())
+		except ValueError: pass
 		try: self.app.canvas.cameraScale = max(0.0001, float(self.scale.get()))
 		except ValueError: pass
 		try: self.app.canvas.cameraR = float(self.diameter.get())/2.0
@@ -1241,8 +1319,10 @@ class CameraFrame(CNCRibbon.PageFrame):
 		except ValueError: pass
 		try: self.app.canvas.cameraDy = float(self.dy.get())
 		except ValueError: pass
-		try: self.app.canvas.cameraZ  = float(self.z.get())
-		except ValueError: pass
+		try:
+			self.app.canvas.cameraZ  = float(self.z.get())
+		except ValueError:
+			self.app.canvas.cameraZ  = None
 		self.app.canvas.cameraUpdate()
 
 	#-----------------------------------------------------------------------
@@ -1603,6 +1683,15 @@ class ToolFrame(CNCRibbon.PageFrame):
 		lines.append("g53 g0 x[toolchangex] y[toolchangey]")
 		lines.append("g53 g0 x[toolprobex] y[toolprobey]")
 		lines.append("g53 g0 z[toolprobez]")
+		if CNC.vars["fastprbfeed"]:
+			prb_reverse = {"2": "4", "3": "5", "4": "2", "5": "3"}
+			CNC.vars["prbcmdreverse"] = (CNC.vars["prbcmd"][:-1] +
+						prb_reverse[CNC.vars["prbcmd"][-1]])
+			currentFeedrate = CNC.vars["fastprbfeed"]
+			while currentFeedrate > CNC.vars["prbfeed"]:
+				lines.append("g91 [prbcmd] f%f z[-tooldistance]" % currentFeedrate)
+				lines.append("g91 [prbcmdreverse] f%f z[tooldistance]" % currentFeedrate)
+				currentFeedrate /= 10
 		lines.append("g91 [prbcmd] f[prbfeed] z[-tooldistance]")
 		lines.append("g4 p1")	# wait a sec
 		lines.append("%wait")

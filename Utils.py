@@ -46,7 +46,8 @@ import tkExtra
 __www__     = "https://github.com/vlachoudis/bCNC"
 __contribute__ = \
 		"@effer Filippo Rivato\n" \
-		"@carlosgs Carlos Garcia Saura"
+		"@carlosgs Carlos Garcia Saura\n" \
+		"@dguerizec"
 __credits__ = \
 		"@1bigpig\n" \
 		"@chamnit Sonny Jeon\n" \
@@ -57,6 +58,7 @@ __translations__ = \
 		"German - @feistus\n" \
 		"Italian - @onekk\n" \
 		"Japanese - @stm32f1\n" \
+                "traditional chinese - @Engineer2Designer\n" \
 		"Portuguese - @moacirbmn \n" \
 		"Russian - @minithc\n" \
 		"Spanish - @carlosgs\n"
@@ -69,6 +71,7 @@ LANGUAGES = {
 		"fr"    : u"Fran\u00e7ais",
 		"it"    : "Italiano",
 		"ja"    : "Japanese",
+		"zh_tw" : "traditional chinese",
 		"pt_BR" : "Brazilian - Portuguese",
 		"ru"    : "Russian",
 	}
@@ -98,6 +101,8 @@ def loadIcons():
 		name,ext = os.path.splitext(os.path.basename(img))
 		try:
 			icons[name] = PhotoImage(file=img)
+			if getBool("CNC", "doublesizeicon"):
+				icons[name] = icons[name].zoom(2,2)
 		except TclError:
 			pass
 

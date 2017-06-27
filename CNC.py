@@ -282,7 +282,9 @@ class Probe:
 			for i in range(self.xn):
 				lines.append("G0Z%.4f"%(self.zmax))
 				lines.append("G0X%.4fY%.4f"%(x,y))
+				lines.append("%wait")	# added for smoothie
 				lines.append("%sZ%.4fF%g"%(CNC.vars["prbcmd"], self.zmin, CNC.vars["prbfeed"]))
+				lines.append("%wait")	# added for smoothie
 				x += xstep
 			x -= xstep
 			xstep = -xstep
@@ -768,6 +770,8 @@ class CNC:
 		except: pass
 		try: CNC.lasercutter    = bool(int(config.get(section, "lasercutter")))
 		except: pass
+		try: CNC.doublesizeicon = bool(int(config.get(section, "doublesizeicon")))
+		except: pass
 		try: CNC.acceleration_x = float(config.get(section, "acceleration_x"))
 		except: pass
 		try: CNC.acceleration_y = float(config.get(section, "acceleration_y"))
@@ -825,15 +829,15 @@ class CNC:
 	#----------------------------------------------------------------------
 	def initPath(self, x=None, y=None, z=None):
 		if x is None:
-			self.x = self.xval = 0
+			self.x = self.xval = CNC.vars['wx'] or 0
 		else:
 			self.x = self.xval = x
 		if y is None:
-			self.y = self.yval = 0
+			self.y = self.yval = CNC.vars['wy'] or 0
 		else:
 			self.y = self.yval = y
 		if z is None:
-			self.z = self.zval = 0
+			self.z = self.zval = CNC.vars['wz'] or 0
 		else:
 			self.z = self.zval = z
 		self.ival = self.jval = self.kval = 0.0
@@ -1667,6 +1671,15 @@ class CNC:
 			lines.append("g53 g0 z[toolprobez]")
 
 			# fixed WCS
+			if CNC.vars["fastprbfeed"]:
+				prb_reverse = {"2": "4", "3": "5", "4": "2", "5": "3"}
+				CNC.vars["prbcmdreverse"] = (CNC.vars["prbcmd"][:-1] +
+							     prb_reverse[CNC.vars["prbcmd"][-1]])
+				currentFeedrate = CNC.vars["fastprbfeed"]
+				while currentFeedrate > CNC.vars["prbfeed"]:
+					lines.append("g91 [prbcmd] f%f z[-tooldistance]" % currentFeedrate)
+					lines.append("g91 [prbcmdreverse] f%f z[tooldistance]" % currentFeedrate)
+					currentFeedrate /= 10
 			lines.append("g91 [prbcmd] f[prbfeed] z[-tooldistance]")
 
 			if CNC.toolPolicy==2:
@@ -1696,8 +1709,7 @@ class CNC:
 		lines.append("g90")		# restore mode
 		lines.append("g0 x[_x] y[_y]")	# ... x,y position
 		lines.append("g0 z[_z]")	# ... z position
-		lines.append("f[feed]")		# ... feed
-		lines.append("[spindle]")	# ... spindle
+		lines.append("f[feed] [spindle]")# ... feed and spindle
 
 		# remember present tool
 		self._lastTool = self.tool
@@ -1768,7 +1780,7 @@ class CNC:
 				zstep -= peck
 
 				# Drill to z
-				lines.append(CNC.gline(z=z/self.unit,f=self.feed))
+				lines.append(CNC.gline(z=z/self.unit,f=self.feed/self.unit))
 
 			# 82=dwell, 86=boring-stop, 89=boring-dwell
 			if self.gcode in (82,86,89):
@@ -1780,7 +1792,7 @@ class CNC:
 			# Move to original position
 			if self.gcode in (85,89):	# boring cycle
 				z = retract
-				lines.append(CNC.gline(z=z/self.unit,f=self.feed))
+				lines.append(CNC.gline(z=z/self.unit,f=self.feed/self.unit))
 
 			z = clearz
 			lines.append(CNC.grapid(z=z/self.unit))
@@ -2047,7 +2059,10 @@ class Block(list):
 				or  Unicode.BLACK_RIGHT_POINTING_TRIANGLE
 		v = self.enable and Unicode.BALLOT_BOX_WITH_X \
 				or  Unicode.BALLOT_BOX
-		return "%s %s %s - [%d]"%(e, v, self.name(), len(self))
+		try:
+			return "%s %s %s - [%d]"%(e, v, self.name(), len(self))
+		except UnicodeDecodeError:
+			return "%s %s %s - [%d]"%(e, v, self.name().decode("ascii","replace"), len(self))
 
 	#----------------------------------------------------------------------
 	def write(self, f):
@@ -2203,6 +2218,10 @@ class GCode:
 	def resetModified(self): self._modified = False
 
 	#----------------------------------------------------------------------
+	def __getitem__(self, item):		return self.blocks[item]
+	def __setitem__(self, item, value):	self.blocks[item] = value
+
+	#----------------------------------------------------------------------
 	# Evaluate code expressions if any and return line
 	#----------------------------------------------------------------------
 	def evaluate(self, line):
@@ -2220,8 +2239,7 @@ class GCode:
 			return "".join(line)
 
 		elif isinstance(line, types.CodeType):
-			eval(line,CNC.vars,self.vars)
-			return None
+			return eval(line,CNC.vars,self.vars)
 
 		else:
 			return line
@@ -2308,9 +2326,9 @@ class GCode:
 		self._lastModified = os.stat(self.filename).st_mtime
 		self._modified = False
 		return True
-		
+
 	#----------------------------------------------------------------------
-	# Save in TXT format 
+	# Save in TXT format
 	# -Enabled Blocks only
 	# -Clened from bCNC metadata and comments
 	# -Uppercase
@@ -2356,6 +2374,11 @@ class GCode:
 		dxf.readFile()
 		dxf.close()
 
+		# prepare dxf file
+		dxf.sort()
+		dxf.convert2Polylines()
+		dxf.expandBlocks()
+
 		#import time; start = time.time()
 		empty = len(self.blocks)==0
 		if empty: self.addBlockFromString("Header",self.header)
@@ -2368,11 +2391,11 @@ class GCode:
 		undoinfo = []
 		for name,layer in dxf.layers.items():
 			enable = not bool(layer.isFrozen())
-			entities = dxf.sortLayer(name)
+			entities = dxf.entities(name)
 			if not entities: continue
 			self.importEntityPoints(None, entities, name, enable, layer.color())
 			path = Path(name)
-			path.fromDxfLayer(dxf, entities, units)
+			path.fromDxf(dxf, entities, units)
 			path.removeZeroLength()
 			if path.color is None:
 				path.color = layer.color()
@@ -2635,6 +2658,33 @@ class GCode:
 		if len(last)==1 and len(last[0])==0: del last[0]
 		if len(self.blocks[-1])==0:
 			self.blocks.pop()
+
+	#----------------------------------------------------------------------
+	# Undo/Redo operations
+	#----------------------------------------------------------------------
+	def undo(self):
+		#print ">u>",self.undoredo.undoText()
+		self.undoredo.undo()
+
+	#----------------------------------------------------------------------
+	def redo(self):
+		#print ">r>",self.undoredo.redoText()
+		self.undoredo.redo()
+
+	#----------------------------------------------------------------------
+	def addUndo(self, undoinfo, msg=""):
+		if isinstance(undoinfo,list):
+			if len(undoinfo)==1:
+				self.undoredo.addUndo(undoinfo[0])
+			else:
+				self.undoredo.addUndo(undo.createListUndo(undoinfo,msg))
+		elif undoinfo is not undo.NullUndo:
+			self.undoredo.addUndo(undoinfo)
+		self._modified = True
+
+	#----------------------------------------------------------------------
+	def canUndo(self):	return self.undoredo.canUndo()
+	def canRedo(self):	return self.undoredo.canRedo()
 
 	#----------------------------------------------------------------------
 	# Append a new tab
@@ -2922,6 +2972,72 @@ class GCode:
 		return undoinfo
 
 	#----------------------------------------------------------------------
+	# Expand block with autolevel information
+	#----------------------------------------------------------------------
+	def autolevelBlock(self, block):
+		new = []
+		autolevel = not self.probe.isEmpty()
+		for line in block:
+			newcmd = []
+			cmds = CNC.compileLine(line)
+			if cmds is None:
+				new.append(line)
+				continue
+			elif isinstance(cmds,str) or isinstance(cmds,unicode):
+				cmds = CNC.breakLine(cmds)
+			else:
+				new.append(line)
+				continue
+
+			self.cnc.motionStart(cmds)
+			if autolevel and self.cnc.gcode in (0,1,2,3) and self.cnc.mval==0:
+				xyz = self.cnc.motionPath()
+				if not xyz:
+					# while auto-levelling, do not ignore non-movement
+					# commands, just append the line as-is
+					new.append(line)
+				else:
+					extra = ""
+					for c in cmds:
+						if c[0].upper() not in ('G','X','Y','Z','I','J','K','R'):
+							extra += c
+					x1,y1,z1 = xyz[0]
+					if self.cnc.gcode == 0:
+						g = 0
+					else:
+						g = 1
+					for x2,y2,z2 in xyz[1:]:
+						for x,y,z in self.probe.splitLine(x1,y1,z1,x2,y2,z2):
+							new.append("G%d%s%s%s%s"%\
+								(g,
+								 self.fmt('X',x/self.cnc.unit),
+								 self.fmt('Y',y/self.cnc.unit),
+								 self.fmt('Z',z/self.cnc.unit),
+								 extra))
+							extra = ""
+						x1,y1,z1 = x2,y2,z2
+				self.cnc.motionEnd()
+			else:
+				self.cnc.motionEnd()
+				new.append(line)
+		return new
+
+	#----------------------------------------------------------------------
+	# Execute autolevel on selected blocks
+	#----------------------------------------------------------------------
+	def autolevel(self, items):
+		undoinfo = []
+		operation = "autolevel"
+		for bid in items:
+			block = self.blocks[bid]
+			if block.name() in ("Header", "Footer"): continue
+			if not block.enable: continue
+			lines = self.autolevelBlock(block)
+			undoinfo.append(self.addBlockOperationUndo(bid, operation))
+			undoinfo.append(self.setBlockLinesUndo(bid, lines))
+		if undoinfo: self.addUndo(undoinfo)
+
+	#----------------------------------------------------------------------
 	# Merge or split blocks depending on motion
 	#
 	# Each block should start with a rapid move and end with a rapid move
@@ -2960,32 +3076,6 @@ class GCode:
 #							#self.blocks.append(Block())
 #							pass
 #				self.cnc.motionEnd()
-
-	#----------------------------------------------------------------------
-	def __getitem__(self, item):		return self.blocks[item]
-	def __setitem__(self, item, value):	self.blocks[item] = value
-
-	#----------------------------------------------------------------------
-	def undo(self):
-		#print ">u>",self.undoredo.undoText()
-		self.undoredo.undo()
-
-	def redo(self):
-		#print ">r>",self.undoredo.redoText()
-		self.undoredo.redo()
-
-	def addUndo(self, undoinfo, msg=""):
-		if isinstance(undoinfo,list):
-			if len(undoinfo)==1:
-				self.undoredo.addUndo(undoinfo[0])
-			else:
-				self.undoredo.addUndo(undo.createListUndo(undoinfo,msg))
-		elif undoinfo is not undo.NullUndo:
-			self.undoredo.addUndo(undoinfo)
-		self._modified = True
-
-	def canUndo(self):	return self.undoredo.canUndo()
-	def canRedo(self):	return self.undoredo.canRedo()
 
 	#----------------------------------------------------------------------
 	# Start a new iterator
@@ -3420,6 +3510,7 @@ class GCode:
 				# Convert very small arcs to lines
 				path.convert2Lines(abs(offset)/10.)
 				D = path.direction()
+#				print "Path Direction:",D
 				if D==0: D=1
 #				print "ZERO\n",path
 				opath = path.offset(D*offset, newname)
@@ -3937,8 +4028,9 @@ class GCode:
 
 				newcmd = []
 				cmds = CNC.compileLine(line)
-				if cmds is None: continue
-				if isinstance(cmds,str) or isinstance(cmds,unicode):
+				if cmds is None:
+					continue
+				elif isinstance(cmds,str) or isinstance(cmds,unicode):
 					cmds = CNC.breakLine(cmds)
 				else:
 					# either CodeType or tuple, list[] append at it as is
