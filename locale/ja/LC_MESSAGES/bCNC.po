@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bCNC Japanese\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-28 02:32+0900\n"
-"PO-Revision-Date: 2017-06-28 02:39+0900\n"
+"POT-Creation-Date: 2017-06-28 09:34+0900\n"
+"PO-Revision-Date: 2017-06-28 13:06+0900\n"
 "Last-Translator: Yuki Shigeta <@stm32f1>\n"
 "Language-Team: hoge\n"
 "Language: ja_JP\n"
@@ -127,8 +127,8 @@ msgstr ""
 #: Sender.py:100
 msgid "Grbl is not connected. Please specify the correct port and click Open."
 msgstr ""
-"Grblが接続されていません. 正しいポートを確認して, \"オープン\" をクリックして"
-"ください."
+"Grblが接続されていません. 接続したポートを確認して, \"開く\" をクリックしてく"
+"ださい."
 
 #: Sender.py:101
 msgid "Connection is established with Grbl"
@@ -484,39 +484,39 @@ msgstr ""
 
 #: ToolsPage.py:513
 msgid "Acceleration x"
-msgstr "x軸 加速度"
+msgstr "X軸 加速度"
 
 #: ToolsPage.py:514
 msgid "Acceleration y"
-msgstr "y軸 加速度"
+msgstr "Y軸 加速度"
 
 #: ToolsPage.py:515
 msgid "Acceleration z"
-msgstr "z軸 加速度"
+msgstr "Z軸 加速度"
 
 #: ToolsPage.py:516
 msgid "Feed max x"
-msgstr "x軸 最大送り速度"
+msgstr "X軸 最大送り速度"
 
 #: ToolsPage.py:517
 msgid "Feed max y"
-msgstr "y軸 最大送り速度"
+msgstr "Y 最大送り速度"
 
 #: ToolsPage.py:518
 msgid "Feed max z"
-msgstr "z軸 最大送り速度"
+msgstr "Z軸 最大送り速度"
 
 #: ToolsPage.py:519
 msgid "Travel x"
-msgstr "x軸 可動域"
+msgstr "X軸 可動域"
 
 #: ToolsPage.py:520
 msgid "Travel y"
-msgstr "y軸 可動域"
+msgstr "Y軸 可動域"
 
 #: ToolsPage.py:521
 msgid "Travel z"
-msgstr "z軸 可動域"
+msgstr "Z軸 可動域"
 
 #: ToolsPage.py:522
 msgid "Decimal digits"
@@ -599,7 +599,7 @@ msgstr "直径"
 
 #: ToolsPage.py:584
 msgid "Mount Axis"
-msgstr "固定軸"
+msgstr "シャンク径"
 
 #: ToolsPage.py:585
 msgid "Flutes"
@@ -1059,7 +1059,7 @@ msgstr "送信に失敗"
 
 #: Utils.py:531
 msgid "There was a problem connecting to the web site"
-msgstr "webサイトへの接続に問題があります"
+msgstr "Webサイトへの接続に問題があります"
 
 #: Utils.py:535
 msgid "Report successfully send"
@@ -1084,7 +1084,7 @@ msgstr "ユーザーカスタムボタン"
 
 #: Utils.py:654
 msgid "Name:"
-msgstr "名称: "
+msgstr "名称:"
 
 #: Utils.py:658
 msgid "Name to appear on button"
@@ -1145,7 +1145,7 @@ msgstr "履歴から開く"
 
 #: FilePage.py:97
 msgid "Save gcode/dxf file [Ctrl-S]"
-msgstr "gcode/dxf を保存"
+msgstr "gcode/dxf を保存 [Ctrl-S]"
 
 #: FilePage.py:102 lib/bFileDialog.py:884
 msgid "Save"
@@ -1340,8 +1340,9 @@ msgid "Edit"
 msgstr "編集"
 
 #: EditorPage.py:147 ProbePage.py:92 ProbePage.py:806
+#, fuzzy
 msgid "Autolevel"
-msgstr ""
+msgstr "オートレベル"
 
 #: EditorPage.py:148 CNCList.py:663
 msgid "Color"
@@ -1353,7 +1354,7 @@ msgstr "インポート"
 
 #: EditorPage.py:150
 msgid "Inkscape"
-msgstr ""
+msgstr "Inkscape"
 
 #: EditorPage.py:151
 msgid "Round"
@@ -1557,7 +1558,7 @@ msgstr ""
 
 #: EditorPage.py:471 EditorPage.py:491
 msgid "Info"
-msgstr ""
+msgstr "情報"
 
 #: EditorPage.py:478 bCNC.py:905
 msgid "Statistics"
@@ -1597,23 +1598,23 @@ msgstr ""
 
 #: ProbePage.py:34
 msgid "Send M6 commands"
-msgstr ""
+msgstr "M6コマンドを送信"
 
 #: ProbePage.py:35
 msgid "Ignore M6 commands"
-msgstr ""
+msgstr "M6コマンドを無視"
 
 #: ProbePage.py:36
 msgid "Manual Tool Change (WCS)"
-msgstr ""
+msgstr "手動ツール交換 (WCS)"
 
 #: ProbePage.py:37
 msgid "Manual Tool Change (TLO)"
-msgstr ""
+msgstr "手動ツール交換 (TLO)"
 
 #: ProbePage.py:38
 msgid "Manual Tool Change (NoProbe)"
-msgstr ""
+msgstr "手動ツール交換 (NoProbe)"
 
 #: ProbePage.py:41
 msgid "ONLY before probing"
@@ -1625,15 +1626,16 @@ msgstr ""
 
 #: ProbePage.py:73 ProbePage.py:80 ProbePage.py:319 ProbePage.py:376 bCNC.py:92
 msgid "Probe"
-msgstr ""
+msgstr "プローブ"
 
 #: ProbePage.py:86
 msgid "Simple probing along a direction"
 msgstr ""
 
 #: ProbePage.py:98
+#, fuzzy
 msgid "Autolevel Z surface"
-msgstr ""
+msgstr "Z平面をオートレベル"
 
 #: ProbePage.py:110
 msgid "Work surface camera view and alignment"
@@ -1641,7 +1643,7 @@ msgstr ""
 
 #: ProbePage.py:117
 msgid "Tool"
-msgstr ""
+msgstr "ツール"
 
 #: ProbePage.py:123
 msgid "Setup probing for manual tool change"
@@ -1649,31 +1651,31 @@ msgstr ""
 
 #: ProbePage.py:140
 msgid "Margins"
-msgstr ""
+msgstr "マージン"
 
 #: ProbePage.py:145
 msgid "Get margins from gcode file"
-msgstr ""
+msgstr "Gコードからマージンを取得"
 
 #: ProbePage.py:152
 msgid "Zero"
-msgstr ""
+msgstr "ゼロ"
 
 #: ProbePage.py:157
 msgid "Set current location as Z-zero for leveling"
-msgstr ""
+msgstr "レベリングのために現在の高さZを0にする"
 
 #: ProbePage.py:164 ProbePage.py:504 TerminalPage.py:29
 msgid "Clear"
-msgstr ""
+msgstr "クリア"
 
 #: ProbePage.py:169
 msgid "Clear probe data"
-msgstr ""
+msgstr "プローブデータをクリア"
 
 #: ProbePage.py:176 plugins/heightmap.py:51
 msgid "Scan"
-msgstr ""
+msgstr "スキャン"
 
 #: ProbePage.py:183
 msgid "Scan probed area for level information on Z plane"
@@ -1681,7 +1683,7 @@ msgstr ""
 
 #: ProbePage.py:196
 msgid "Common"
-msgstr ""
+msgstr "コモン"
 
 #: ProbePage.py:206
 msgid "Fast Probe Feed:"
@@ -1692,64 +1694,65 @@ msgid "Set initial probe feed rate for tool change and calibration"
 msgstr ""
 
 #: ProbePage.py:217
+#, fuzzy
 msgid "Probe Feed:"
-msgstr ""
+msgstr "プローブ 送り:"
 
 #: ProbePage.py:221
 msgid "Set probe feed rate"
-msgstr ""
+msgstr "プローブの送り速度を設定"
 
 #: ProbePage.py:228
 msgid "TLO"
-msgstr ""
+msgstr "TLO"
 
 #: ProbePage.py:232
 msgid "Set tool offset for probing"
-msgstr ""
+msgstr "プローブ用にツールのオフセットを設定"
 
 #: ProbePage.py:238 ControlPage.py:877 ControlPage.py:912
 msgid "set"
-msgstr ""
+msgstr "設定"
 
 #: ProbePage.py:248
 msgid "Probe Command"
-msgstr ""
+msgstr "プローブコマンド"
 
 #: ProbePage.py:323 ProbePage.py:1467
 msgid "Probe:"
-msgstr ""
+msgstr "プローブ:"
 
 #: ProbePage.py:341
 msgid "Goto"
-msgstr ""
+msgstr "Goto"
 
 #: ProbePage.py:348
 msgid "Rapid goto to last probe location"
-msgstr ""
+msgstr "高速で,最後にプローブした位置に移動"
 
 #: ProbePage.py:352
 msgid "Pos:"
-msgstr ""
+msgstr "Pos:"
 
 #: ProbePage.py:357
 msgid "Probe along X direction"
-msgstr ""
+msgstr "X方向にプローブを実行"
 
 #: ProbePage.py:363
 msgid "Probe along Y direction"
-msgstr ""
+msgstr "Y方向にプローブを実行"
 
 #: ProbePage.py:369
 msgid "Probe along Z direction"
-msgstr ""
+msgstr "Z方向にプローブを実行"
 
 #: ProbePage.py:383
 msgid "Perform a single probe cycle"
-msgstr ""
+msgstr "プローブを1回実行"
 
 #: ProbePage.py:396
 msgid "Diameter:"
-msgstr ""
+msgstr "直径:"
 
 #: ProbePage.py:399
 msgid "Probing ring internal diameter"
@@ -1765,7 +1768,7 @@ msgstr ""
 
 #: ProbePage.py:423
 msgid "Markers:"
-msgstr ""
+msgstr "マーカー:"
 
 #: ProbePage.py:433
 msgid "Select orientation marker"
@@ -1779,7 +1782,7 @@ msgstr ""
 
 #: ProbePage.py:452
 msgid "Gcode:"
-msgstr ""
+msgstr "Gコード:"
 
 #: ProbePage.py:459
 msgid "GCode X coordinate of orientation point"
@@ -1791,7 +1794,7 @@ msgstr ""
 
 #: ProbePage.py:479
 msgid "Delete current marker"
-msgstr ""
+msgstr "現在のマーカーを削除"
 
 #: ProbePage.py:492
 msgid "Machine X coordinate of orientation point"
@@ -1803,11 +1806,11 @@ msgstr ""
 
 #: ProbePage.py:512 ProbePage.py:720
 msgid "Delete all markers"
-msgstr ""
+msgstr "すべてのマーカーを削除"
 
 #: ProbePage.py:517
 msgid "Angle:"
-msgstr ""
+msgstr "角度:"
 
 #: ProbePage.py:533
 msgid "Align GCode with the machine markers"
@@ -1815,15 +1818,15 @@ msgstr ""
 
 #: ProbePage.py:538 ProbePage.py:1195
 msgid "Offset:"
-msgstr ""
+msgstr "オフセット:"
 
 #: ProbePage.py:551
 msgid "Error:"
-msgstr ""
+msgstr "エラー:"
 
 #: ProbePage.py:591
 msgid "Probe connected?"
-msgstr ""
+msgstr "プローブは接続されていますか?"
 
 #: ProbePage.py:592
 msgid ""
@@ -1836,15 +1839,15 @@ msgstr ""
 #: ProbePage.py:992 ProbePage.py:999 ProbePage.py:1009 ProbePage.py:1016
 #: ProbePage.py:1023
 msgid "Probe Error"
-msgstr ""
+msgstr "プローブエラー"
 
 #: ProbePage.py:604 ProbePage.py:1024
 msgid "Invalid probe feed rate"
-msgstr ""
+msgstr "プローブの送り速度が無効です"
 
 #: ProbePage.py:635
 msgid "At least one probe direction should be specified"
-msgstr ""
+msgstr "少なくとも1つ,プローブの方向を設定する必要があります"
 
 #: ProbePage.py:660
 msgid "Probe Center Error"
@@ -1852,7 +1855,7 @@ msgstr ""
 
 #: ProbePage.py:661
 msgid "Invalid diameter entered"
-msgstr ""
+msgstr "無効な直径が入力されました"
 
 #: ProbePage.py:721
 msgid "Do you want to delete all orientation markers?"
@@ -1860,15 +1863,15 @@ msgstr ""
 
 #: ProbePage.py:812
 msgid "Min"
-msgstr ""
+msgstr "最小"
 
 #: ProbePage.py:814
 msgid "Max"
-msgstr ""
+msgstr "最大"
 
 #: ProbePage.py:816
 msgid "Step"
-msgstr ""
+msgstr "ステップ"
 
 #: ProbePage.py:827
 msgid "X minimum"
@@ -1880,7 +1883,7 @@ msgstr ""
 
 #: ProbePage.py:840
 msgid "X step"
-msgstr ""
+msgstr "X ステップ"
 
 #: ProbePage.py:849
 msgid "X bins"
@@ -1896,7 +1899,7 @@ msgstr ""
 
 #: ProbePage.py:872
 msgid "Y step"
-msgstr ""
+msgstr "Y ステップ"
 
 #: ProbePage.py:881
 msgid "Y bins"
@@ -1944,19 +1947,19 @@ msgstr ""
 
 #: ProbePage.py:1077
 msgid "Switch To"
-msgstr ""
+msgstr "切り替え先"
 
 #: ProbePage.py:1083
 msgid "Switch between camera and spindle"
-msgstr ""
+msgstr "カメラとスピンドルの切り替え"
 
 #: ProbePage.py:1089
 msgid "Edge Detection"
-msgstr ""
+msgstr "角の検出"
 
 #: ProbePage.py:1096
 msgid "Turn on/off edge detection"
-msgstr ""
+msgstr "角の検出を有効/無効化"
 
 #: ProbePage.py:1102
 msgid "Freeze"
@@ -1968,15 +1971,15 @@ msgstr ""
 
 #: ProbePage.py:1160
 msgid "Location:"
-msgstr ""
+msgstr "場所:"
 
 #: ProbePage.py:1167
 msgid "Camera location inside canvas"
-msgstr ""
+msgstr "キャンバス内のカメラの位置"
 
 #: ProbePage.py:1171
 msgid "Scale:"
-msgstr ""
+msgstr "スケール:"
 
 #: ProbePage.py:1177
 msgid "Camera scale [pixels / unit]"
@@ -1992,11 +1995,11 @@ msgstr ""
 
 #: ProbePage.py:1189
 msgid "Get"
-msgstr ""
+msgstr "取得"
 
 #: ProbePage.py:1191
 msgid "Get diameter from active endmill"
-msgstr ""
+msgstr "有効なエンドミルから直径を取得"
 
 #: ProbePage.py:1201 ProbePage.py:1208
 msgid "Camera offset from gantry"
@@ -2008,23 +2011,25 @@ msgstr ""
 
 #: ProbePage.py:1218
 msgid "Register:"
-msgstr ""
+msgstr "登録:"
 
 #: ProbePage.py:1219
 msgid "1. Spindle"
-msgstr ""
+msgstr "1. スピンドル"
 
 #: ProbePage.py:1223
 msgid "Mark spindle position for calculating offset"
 msgstr ""
+"オフセットの計算のためにsupindoru \n"
+"の位置を登録"
 
 #: ProbePage.py:1225
 msgid "2. Camera"
-msgstr ""
+msgstr "2. カメラ"
 
 #: ProbePage.py:1229
 msgid "Mark camera position for calculating offset"
-msgstr ""
+msgstr "オフセットの計算のためにカメラの位置を登録"
 
 #: ProbePage.py:1296
 msgid "Spindle position is registered"
@@ -2040,11 +2045,11 @@ msgstr ""
 
 #: ProbePage.py:1310
 msgid "Camera offset is updated"
-msgstr ""
+msgstr "カメラのオフセットが更新されました"
 
 #: ProbePage.py:1369 ProbePage.py:1516
 msgid "Calibrate"
-msgstr ""
+msgstr "補正する"
 
 #: ProbePage.py:1375
 msgid "Perform a single a tool change cycle to set the calibration field"
@@ -2052,7 +2057,7 @@ msgstr ""
 
 #: ProbePage.py:1379
 msgid "Change"
-msgstr ""
+msgstr "変更"
 
 #: ProbePage.py:1385
 msgid "Perform a tool change cycle"
@@ -2072,11 +2077,11 @@ msgstr ""
 
 #: ProbePage.py:1414
 msgid "Pause:"
-msgstr ""
+msgstr "一時停止:"
 
 #: ProbePage.py:1437
 msgid "Change:"
-msgstr ""
+msgstr "変更:"
 
 #: ProbePage.py:1441
 msgid "Manual tool change Machine X location"
@@ -2092,7 +2097,7 @@ msgstr ""
 
 #: ProbePage.py:1457 ProbePage.py:1487
 msgid "get"
-msgstr ""
+msgstr "取得"
 
 #: ProbePage.py:1461
 msgid "Get current gantry position as machine tool change location"
@@ -2116,7 +2121,7 @@ msgstr ""
 
 #: ProbePage.py:1497 ControlPage.py:835
 msgid "Distance:"
-msgstr ""
+msgstr "距離:"
 
 #: ProbePage.py:1502
 msgid "After a tool change distance to scan starting from ProbeZ"
@@ -2124,7 +2129,7 @@ msgstr ""
 
 #: ProbePage.py:1508
 msgid "Calibration:"
-msgstr ""
+msgstr "補正:"
 
 #: ProbePage.py:1512
 msgid "Tool probe height"
@@ -2141,11 +2146,11 @@ msgstr ""
 
 #: ProbePage.py:1572
 msgid "Invalid tool change position"
-msgstr ""
+msgstr "ツール変更の位置が不適切です"
 
 #: ProbePage.py:1582
 msgid "Invalid tool probe location"
-msgstr ""
+msgstr "プローブの位置が不適切です"
 
 #: ProbePage.py:1590 ProbePage.py:1606
 msgid "Invalid tool scanning distance entered"
@@ -2153,11 +2158,11 @@ msgstr ""
 
 #: ProbePage.py:1598
 msgid "Invalid tool height or not calibrated"
-msgstr ""
+msgstr "ツールの高さが無効または,調整されていません"
 
 #: ProbePage.py:1701
 msgid "Probe configuration and probing"
-msgstr ""
+msgstr "プローブの設定及びプローブ中です"
 
 #: CNCCanvas.py:357
 msgid "Select objects with mouse"
@@ -2169,7 +2174,7 @@ msgstr ""
 
 #: CNCCanvas.py:367
 msgid "Click to set the origin (zero)"
-msgstr ""
+msgstr "クリックして,原点を設定"
 
 #: CNCCanvas.py:372
 msgid "Move graphically objects"
@@ -2213,36 +2218,36 @@ msgstr ""
 #: CNCCanvas.py:1767
 #, python-format
 msgid ">>> ERROR: %s\n"
-msgstr ""
+msgstr ">>> エラー: %s\n"
 
 #: CNCCanvas.py:1768
 #, python-format
 msgid "     line: %s\n"
-msgstr ""
+msgstr "     ライン: %s\n"
 
 #: CNCCanvas.py:1994
 msgid "Change viewing angle"
-msgstr ""
+msgstr "視点の角度を変更"
 
 #: CNCCanvas.py:1998
 msgid "Zoom In [Ctrl-=]"
-msgstr ""
+msgstr "ズームイン [Ctrl-=]"
 
 #: CNCCanvas.py:2003
 msgid "Zoom Out [Ctrl--]"
-msgstr ""
+msgstr "ズームアウト [Ctrl--]"
 
 #: CNCCanvas.py:2008
 msgid "Fit to screen [F]"
-msgstr ""
+msgstr "スクリーンにフィット [F]"
 
 #: CNCCanvas.py:2011 ControlPage.py:868
 msgid "Tool:"
-msgstr ""
+msgstr "ツール:"
 
 #: CNCCanvas.py:2022
 msgid "Select tool [S]"
-msgstr ""
+msgstr "ツールを選択 [S]"
 
 #: CNCCanvas.py:2031
 msgid "Pan viewport [X]"
@@ -2250,7 +2255,7 @@ msgstr ""
 
 #: CNCCanvas.py:2057
 msgid "Ruler [R]"
-msgstr ""
+msgstr "ルーター [R]"
 
 #: CNCCanvas.py:2063
 msgid "Draw:"
@@ -2298,7 +2303,7 @@ msgstr ""
 
 #: bCNC.py:87
 msgid "All accepted"
-msgstr ""
+msgstr "対応ファイル"
 
 #: bCNC.py:88 bCNC.py:2003
 msgid "G-Code"
@@ -2310,7 +2315,7 @@ msgstr ""
 
 #: bCNC.py:144
 msgid "Controller buffer fill"
-msgstr ""
+msgstr "コントローラーのバッファを埋める"
 
 #: bCNC.py:171
 msgid ""
@@ -2447,13 +2452,13 @@ msgstr ""
 
 #: bCNC.py:1945
 msgid "Existing Autolevel"
-msgstr ""
+msgstr "オートレベルを終了"
 
 #: bCNC.py:1946
 msgid ""
 "Autolevel/probe information already exists.\n"
 "Delete it?"
-msgstr ""
+msgstr "オートレベル,プローブの情報がすでに存在します"
 
 #: bCNC.py:1951
 #, python-format
@@ -2481,7 +2486,7 @@ msgstr "Gcode/DXF ファイルを読み込む"
 
 #: bCNC.py:2033
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: bCNC.py:2034
 #, python-format
@@ -2568,15 +2573,15 @@ msgstr ""
 
 #: ControlPage.py:40
 msgid "Connection"
-msgstr ""
+msgstr "接続"
 
 #: ControlPage.py:41
 msgid "Hard Reset"
-msgstr ""
+msgstr "ハードリセット"
 
 #: ControlPage.py:48
 msgid "Home"
-msgstr ""
+msgstr "ホーム"
 
 #: ControlPage.py:54
 msgid "Perform a homing cycle [$H]"
@@ -2584,27 +2589,28 @@ msgstr ""
 
 #: ControlPage.py:61
 msgid "Unlock"
-msgstr ""
+msgstr "アンロック"
 
 #: ControlPage.py:67
 msgid "Unlock controller [$X]"
-msgstr ""
+msgstr "コントローラーをアンロック [$X]"
 
 #: ControlPage.py:73
 msgid "Reset"
-msgstr ""
+msgstr "リセット"
 
 #: ControlPage.py:79
 msgid "Software reset of controller [ctrl-x]"
-msgstr ""
+msgstr "コントローラーのソフトをリセット"
 
 #: ControlPage.py:112
+#, fuzzy
 msgid "Run g-code commands from editor to controller"
-msgstr ""
+msgstr "エディタからのGコードコマンドをコントローラーに送る"
 
 #: ControlPage.py:117
 msgid "Pause"
-msgstr ""
+msgstr "一時停止"
 
 #: ControlPage.py:121
 msgid "Pause running program. Sends either FEED_HOLD ! or CYCLE_START ~"
@@ -2616,7 +2622,7 @@ msgstr ""
 
 #: ControlPage.py:148
 msgid "Status:"
-msgstr ""
+msgstr "状態:"
 
 #: ControlPage.py:159
 msgid ""
@@ -2627,43 +2633,43 @@ msgstr ""
 
 #: ControlPage.py:167
 msgid "WPos:"
-msgstr ""
+msgstr "WPos:"
 
 #: ControlPage.py:177
 msgid "X work position (click to set)"
-msgstr ""
+msgstr "X加工座標 (クリックしてセット)"
 
 #: ControlPage.py:190
 msgid "Y work position (click to set)"
-msgstr ""
+msgstr "Y加工座標 (クリックしてセット)"
 
 #: ControlPage.py:203
 msgid "Z work position (click to set)"
-msgstr ""
+msgstr "Z加工座標 (クリックしてセット)"
 
 #: ControlPage.py:211
 msgid "MPos:"
-msgstr ""
+msgstr "MPos:"
 
 #: ControlPage.py:234
 msgid "Set X coordinate to zero (or to typed coordinate in WPos)"
-msgstr ""
+msgstr "X座標を0にセット (またはWPosに座標を入力)"
 
 #: ControlPage.py:243
 msgid "Set Y coordinate to zero (or to typed coordinate in WPos)"
-msgstr ""
+msgstr "Y座標を0にセット (またはWPosに座標を入力)"
 
 #: ControlPage.py:252
 msgid "Set Z coordinate to zero (or to typed coordinate in WPos)"
-msgstr ""
+msgstr "Z座標を0にセット (またはWPosに座標を入力)"
 
 #: ControlPage.py:261
 msgid "Set WPOS"
-msgstr ""
+msgstr "加工座標を設定"
 
 #: ControlPage.py:268
 msgid "Set WPOS to mouse location"
-msgstr ""
+msgstr "カーソルの位置に加工座標を設定"
 
 #: ControlPage.py:272
 msgid "Move Gantry"
@@ -2675,11 +2681,11 @@ msgstr ""
 
 #: ControlPage.py:291
 msgid "Show Info"
-msgstr ""
+msgstr "情報を表示"
 
 #: ControlPage.py:293
 msgid "Clear Message"
-msgstr ""
+msgstr "メッセージをクリア"
 
 #: ControlPage.py:297
 msgid "Feed hold"
@@ -2687,23 +2693,23 @@ msgstr ""
 
 #: ControlPage.py:299
 msgid "Resume"
-msgstr ""
+msgstr "再開"
 
 #: ControlPage.py:415
 #, python-format
 msgid "Last error: %s\n"
-msgstr ""
+msgstr "最後のエラー: %s\n"
 
 #: ControlPage.py:421
 msgid ""
 "No info available.\n"
 "Please contact the author."
-msgstr ""
+msgstr "情報がありません.製作者に連絡してください."
 
 #: ControlPage.py:422
 #, python-format
 msgid "State: %s"
-msgstr ""
+msgstr "状態: %sz"
 
 #: ControlPage.py:449
 msgid "Move +Z"
@@ -2723,11 +2729,11 @@ msgstr "移動 +X +Y"
 
 #: ControlPage.py:486
 msgid "Multiply step by 10"
-msgstr ""
+msgstr "ステップを10倍"
 
 #: ControlPage.py:495
 msgid "Increase step by 1 unit"
-msgstr ""
+msgstr "ステップを1単位ずつ増やす"
 
 #: ControlPage.py:510
 msgid "Move -X"
@@ -2749,11 +2755,12 @@ msgstr "移動 +X"
 
 #: ControlPage.py:540
 msgid "Step for every move operation"
-msgstr ""
+msgstr "すべての移動におけるステップ数"
 
 #: ControlPage.py:550
+#, fuzzy
 msgid "Step for Z move operation"
-msgstr ""
+msgstr "Z方向の移動ステップ"
 
 #: ControlPage.py:580
 msgid "Move -Z"
@@ -2773,16 +2780,16 @@ msgstr "移動 +X -Y"
 
 #: ControlPage.py:615
 msgid "Divide step by 10"
-msgstr ""
+msgstr "ステップを1/10倍"
 
 #: ControlPage.py:623
 msgid "Decrease step by 1 unit"
-msgstr ""
+msgstr "ステップを1単位ずつ減らす"
 
 #: ControlPage.py:700
 #, python-format
 msgid "Step: %g"
-msgstr ""
+msgstr "ステップ: %g"
 
 #: ControlPage.py:705
 #, python-format
@@ -2792,7 +2799,7 @@ msgstr ""
 #: ControlPage.py:829
 #, python-format
 msgid "Switch to workspace %s"
-msgstr ""
+msgstr "ワークスペース %s に切り替え"
 
 #: ControlPage.py:843
 msgid "Distance Mode [G90,G91]"
@@ -2800,11 +2807,11 @@ msgstr ""
 
 #: ControlPage.py:853
 msgid "Units:"
-msgstr "ユニット:"
+msgstr "単位:"
 
 #: ControlPage.py:861
 msgid "Units [G20, G21]"
-msgstr "ユニット [G20, G21]"
+msgstr "単位 [G20, G21]"
 
 #: ControlPage.py:873
 msgid "Tool number [T#]"
@@ -2852,7 +2859,7 @@ msgstr "スピンドル"
 
 #: ControlPage.py:982
 msgid "Start/Stop spindle (M3/M5)"
-msgstr ""
+msgstr "スピンドル ON/OFF (M3/M5)"
 
 #: ControlPage.py:993
 msgid "Set spindle RPM"
@@ -2860,19 +2867,19 @@ msgstr "スピンドルの速度 RPM"
 
 #: ControlPage.py:1111
 msgid "CNC communication and control"
-msgstr ""
+msgstr "CNCの通信,制御"
 
 #: ControlPage.py:1112
 msgid "Control"
-msgstr ""
+msgstr "コントロール"
 
 #: TerminalPage.py:25 TerminalPage.py:146
 msgid "Terminal"
-msgstr ""
+msgstr "端末"
 
 #: TerminalPage.py:33
 msgid "Clear terminal"
-msgstr ""
+msgstr "端末をクリア"
 
 #: TerminalPage.py:40
 msgid "Commands"
@@ -3353,7 +3360,7 @@ msgstr ""
 
 #: plugins/flatten.py:262
 msgid "Cut Direction"
-msgstr ""
+msgstr "切断方向"
 
 #: plugins/flatten.py:263
 msgid "Pocket type"
@@ -3406,7 +3413,7 @@ msgstr ""
 
 #: plugins/tile.py:11
 msgid "Tile"
-msgstr ""
+msgstr "タイル"
 
 #: plugins/tile.py:28
 msgid "Generate replicas of selected code"
@@ -3461,8 +3468,9 @@ msgid "Resolution (degrees)"
 msgstr "解像度 (角度)"
 
 #: plugins/bowl.py:110
+#, fuzzy
 msgid "Progressive"
-msgstr ""
+msgstr "進行"
 
 #: plugins/bowl.py:125
 msgid "Generated: BOWL"
@@ -3542,60 +3550,65 @@ msgstr "最大サイズ(幅 または 高さ)"
 
 #: plugins/halftone.py:45
 msgid "Cell size"
-msgstr ""
+msgstr "セルサイズ"
 
 #: plugins/halftone.py:46
 msgid "Max diameter, cap limit"
-msgstr ""
+msgstr "最大直径"
 
 #: plugins/halftone.py:47
 msgid "Min diameter, cut off"
-msgstr ""
+msgstr "最小直径, 切り出し"
 
 #: plugins/halftone.py:48
 msgid "Image rotation angle"
-msgstr ""
+msgstr "画像の回転角度"
 
 #: plugins/halftone.py:51
+#, fuzzy
 msgid "Generate for conical end mill"
-msgstr ""
+msgstr "円錐エンドミル用に生成"
 
 #: plugins/halftone.py:95
 msgid "Halftone abort: This plugin requires PIL/Pillow to read image data"
 msgstr ""
+"ハーフトーン 失敗: このプラグインを使うには,画像データを読み込むために PIL/"
+"Pillowが必要です"
 
 #: plugins/halftone.py:115
 msgid "Halftone abort: Size too small to draw anything!"
-msgstr ""
+msgstr "ハーフトーン 失敗: 削り出すには,画像が小さすぎます!"
 
 #: plugins/halftone.py:119
 msgid "Halftone abort: Minimum diameter must be minor then Maximum"
-msgstr ""
+msgstr "ハーフトーン 失敗: 最小直径は最大直径よりも小さい必要があります"
 
 #: plugins/halftone.py:123
 msgid "Halftone abort: Maximum diameter too small"
-msgstr ""
+msgstr "ハーフトーン 失敗: 最大直径が小さすぎきます"
 
 #: plugins/halftone.py:127
 msgid "Halftone abort: Cell size too small"
-msgstr ""
+msgstr "ハーフトーン 失敗: セルサイズが小さすぎます"
 
 #: plugins/halftone.py:137
 msgid "Halftone abort: Angle in V-Cutting end mill is missing"
-msgstr ""
+msgstr "ハーフトーン 失敗: Vカット用のエンドミルの角度情報がありません"
 
 #: plugins/halftone.py:140
 msgid "Halftone abort: Conical path need V-Cutting end mill"
 msgstr ""
+"ハーフトーン 失敗: 円錐型に削るためには,Vカット用のエンドミルが必要です"
 
 #: plugins/halftone.py:148
 msgid "Halftone abort: Can't read image file"
-msgstr ""
+msgstr "ハーフトーン 失敗: 画像の読み込みに失敗しました"
 
 #: plugins/halftone.py:242
 #, python-format
 msgid "Generated Halftone size W=%d x H=%d x D=%d ,Total points:%i"
 msgstr ""
+"サイズ W=%d x H=%d x D=%d , Total points:%i でハーフトーンを生成しました"
 
 #: plugins/box.py:11
 msgid "Box"
@@ -3639,7 +3652,7 @@ msgstr "組みつぎの作成"
 
 #: plugins/box.py:352
 msgid "Generated: BOX with fingers"
-msgstr "生成済み: 組みつぎ"
+msgstr "生成完了: 組みつぎ"
 
 #: plugins/text.py:30
 msgid "Create text using a ttf font"
